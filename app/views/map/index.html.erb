@@ -21,23 +21,6 @@
 
 <script type="text/javascript">
   var map = L.map('map');
-
-  // L.Icon.Default.imagePath = (function () {
-  //   var scripts = document.getElementsByTagName('script'),
-  //       leafletRe = /[\/^]leaflet[\-\._]?([\w\-\._]*)\.js\??/;
-  
-  //   var i, len, src, matches, path;
-  
-  //   for (i = 0, len = scripts.length; i < len; i++) {
-  //     src = scripts[i].src;
-  //     matches = src.match(leafletRe);
-  
-  //     if (matches) {
-  //       path = src.split(leafletRe)[0];
-  //       return '/' + 'images/leaflet';   /*  ピン画像へのパス  */
-  //     }
-  //   }
-  // }());
   
   let DefaultIcon = L.icon({
     iconUrl: "packs/media/images/marker-icon-2b3e1faf.png",
@@ -57,32 +40,16 @@
     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
   }).addTo(map);
   
-  var control = L.Routing.control({
+  <% @courses.each do |c| %>
+    L.Routing.control({
+      waypoints: [
+        L.latLng(<%= c.departure_lat %>, <%= c.departure_lon %>),
+          <% c.waypoints.each do |wp| %>
+            L.latLng(<%= wp.lat %>, <%= wp.lon %>),
+          <% end %>
+        L.latLng(<%= c.arrival_lat %>, <%= c.arrival_lon %>)
+      ]
+    }).addTo(map);
+  <% end %>
   
-    createMarker: function(i, wp) {
-      var options = {
-          draggable: this.draggableWaypoints
-        },
-        marker = L.marker(wp.latLng, options);
-  
-      return marker;
-    },
-    waypoints: [
-      L.latLng(35.46222222, 139.62444444),
-      L.latLng(35.681298, 139.766247)
-    ],
-    geocoder: L.Control.Geocoder.nominatim(),
-      routeWhileDragging: true,
-      reverseWaypoints: true,
-      showAlternatives: true,
-      altLineOptions: {
-          styles: [
-              {color: 'black', opacity: 0.15, weight: 9},
-              {color: 'white', opacity: 0.8, weight: 6},
-              {color: 'blue', opacity: 0.5, weight: 2}
-          ]
-      }
-  }).addTo(map);
-  
-  L.Routing.errorControl(control).addTo(map);
 </script>
