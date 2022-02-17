@@ -19,7 +19,8 @@ Course.create(
   arrival_lat: 35.55113195869533, 
   arrival_lon: 133.2378299115122)
   
-Waypoint.create(
+
+WayPoint.create(
   course_id: 1,
   lat: 35.50105247610229, 
   lon: 133.0605598295954)
