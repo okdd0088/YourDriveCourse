@@ -1,3 +1,3 @@
 class Course < ApplicationRecord
-  has_many :way_points
+  has_many :waypoints
 end
