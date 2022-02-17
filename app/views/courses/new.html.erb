@@ -1,3 +1,33 @@
+<h1>新規作成</h1>
+<table>
+  <%= form_for(@course, url:{controller: 'courses', action:'create'}) do |form| %>
+  <tr>
+    <th>detail</th>
+    <td><%= form.text_field :detail %></td>
+  </tr>
+  <tr>
+    <th>departure_lat</th>
+    <td><%= form.text_field :departure_lat %></td>
+  </tr>
+  <tr>
+    <th>departure_lon</th>
+    <td><%= form.text_field :departure_lon %></td>
+  </tr>
+  <tr>
+    <th>arrival_lat</th>
+    <td><%= form.text_field :arrival_lat %></td>
+  </tr>
+  <tr>
+    <th>arrival_lon</th>
+    <td><%= form.text_field :arrival_lon %></td>
+  </tr>
+    <th></th>
+    <td><%= form.submit '送信' %></td>
+  </tr>
+
+  <% end %>
+</table>
+
 <div id="map" class="map">
 </div>
 
@@ -21,6 +51,7 @@
 
 <script type="text/javascript">
 
+  // var map = L.map('map').setView([35.49314371541488, 133.0642004015681], 13);
   var map = L.map('map', { scrollWheelZoom: false }),
     waypoints = [
       L.latLng(35.49314371541488, 133.0642004015681),
@@ -84,16 +115,6 @@
     return btn;
   }
 
-  function dpLatLon() {
-    var routeArray = new Array();
-    routeArray = control.getWaypoints();
-    routeArray.forEach((element,index) => {
-      console.log(`${index}: ${element.latLng.lat}`);
-      console.log(`${index}: ${element.latLng.lng}`);
-    });
-    console.log("end")
-  }
-
   map.on('click', function(e) {
     var container = L.DomUtil.create('div'),
       startBtn = createButton('Start from this location', container),
@@ -117,21 +138,21 @@
   });
 
   control.on('routingstart',function(e){
-    dpLatLon();
+    var routeArray = new Array();
+    routeArray = control.getWaypoints();
+    // routeArray.forEach((element,index) => {
+    //   console.log(`${index}: ${element.latLng.lat}`);
+    //   console.log(`${index}: ${element.latLng.lng}`);
+    // });
+    let element = document.getElementById('course_departure_lat');
+    element.value = routeArray[0].latLng.lat
+    element = document.getElementById('course_departure_lon');
+    element.value = routeArray[0].latLng.lng
+    element = document.getElementById('course_arrival_lat');
+    element.value = routeArray[1].latLng.lat
+    element = document.getElementById('course_arrival_lon');
+    element.value = routeArray[1].latLng.lng
+    
   });
-
-  
-
-  // <% @courses.each do |c| %>
-  //   L.Routing.control({
-  //     waypoints: [
-  //       L.latLng(<%= c.departure_lat %>, <%= c.departure_lon %>),
-  //         <% c.waypoints.each do |wp| %>
-  //           L.latLng(<%= wp.lat %>, <%= wp.lon %>),
-  //         <% end %>
-  //       L.latLng(<%= c.arrival_lat %>, <%= c.arrival_lon %>)
-  //     ]
-  //   }).addTo(map);
-  // <% end %>
   
 </script>
